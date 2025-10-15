@@ -57,3 +57,26 @@ pub fn intersection_of_sets(set1: &[(String, f64)], set2: &[(String, f64)]) -> V
     
     return result;
 }
+
+pub fn calculate_common_frequencies(set1: &[(String, f64)], set2: &[(String, f64)]) -> (f64, f64) {
+    let mut sum1 = 0.0;
+    let mut sum2 = 0.0;
+    
+    let lgrams1: HashSet<&String> = set1.iter().map(|(lgram, _)| lgram).collect();
+    let lgrams2: HashSet<&String> = set2.iter().map(|(lgram, _)| lgram).collect();
+    let common_lgrams: HashSet<&String> = lgrams1.intersection(&lgrams2).cloned().collect();
+
+    for (lgram, freq) in set1.iter() {
+        if common_lgrams.contains(lgram) {
+            sum1 += freq
+        }
+    } 
+
+    for (lgram, freq) in set2.iter() {
+        if common_lgrams.contains(lgram) {
+            sum2 += freq
+        }
+    } 
+
+    return (sum1, sum2);
+}
