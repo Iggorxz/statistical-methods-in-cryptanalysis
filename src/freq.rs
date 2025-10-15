@@ -26,3 +26,8 @@ pub fn calculate_frequencies(text: &String, l: usize, alphabet: Option<&str>) ->
     return result;
 
 }
+
+pub fn get_often_lgrams(frequencies: &[(String, f64)], num: usize) -> Vec<(String, f64)> {
+    let often_lgrams = frequencies.iter().take(num).cloned().collect();
+    return often_lgrams;
+}
