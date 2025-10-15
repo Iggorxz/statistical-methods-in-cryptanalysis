@@ -42,3 +42,18 @@ pub fn existence_check(set1: &[(String, f64)], set2: &[(String, f64)]) -> bool {
     let verify = set1.iter().all(|(lgram, _)| lgrams2.contains(lgram));
     return verify;
 }
+
+pub fn intersection_of_sets(set1: &[(String, f64)], set2: &[(String, f64)]) -> Vec<(String, f64)> {
+    let mut result = Vec::new();
+    let lgrams1: HashSet<&String> = set1.iter().map(|(lgram, _)| lgram).collect();
+    let lgrams2: HashSet<&String> = set2.iter().map(|(lgram, _)| lgram).collect();
+    let common_lgrams: HashSet<&String> = lgrams1.intersection(&lgrams2).cloned().collect();
+
+    for (lgram, freq) in set1.iter() {
+        if common_lgrams.contains(lgram) {
+            result.push((lgram.clone(), *freq));
+        }
+    }
+    
+    return result;
+}
