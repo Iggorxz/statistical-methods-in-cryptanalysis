@@ -36,3 +36,13 @@ pub fn int_to_symbols(mut int: usize, l: usize, ukrainian_alphabet: &'static str
     }
     return result.iter().rev().collect()
 }
+
+pub fn symbols_to_int(text: String, ukrainian_alphabet: &'static str) -> usize {
+    let mut num = 0;
+    for ch in text.chars(){
+        if let Some(index) = ukrainian_alphabet.chars().position(|c| c == ch){
+            num = num * 32 + index;
+        }
+    }
+    return num;
+}
