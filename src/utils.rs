@@ -24,3 +24,15 @@ pub fn compute_index_of_coincidence(text: &str, l: usize) -> f64 {
     let index = sum_freq / (text_length * (text_length - 1.0));
     return index;
 }
+
+pub fn int_to_symbols(mut int: usize, l: usize, ukrainian_alphabet: &'static str) -> String {
+    let mut result = Vec::with_capacity(l);
+    for _ in 0..l {
+        let index = int % 32;
+        let char = ukrainian_alphabet.chars().nth(index)
+        .expect("Error");
+        result.push(char);
+        int /= 32;
+    }
+    return result.iter().rev().collect()
+}
