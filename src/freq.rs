@@ -31,3 +31,8 @@ pub fn get_often_lgrams(frequencies: &[(String, f64)], num: usize) -> Vec<(Strin
     let often_lgrams = frequencies.iter().take(num).cloned().collect();
     return often_lgrams;
 }
+
+pub fn get_rare_lgrams(frequencies: &[(String, f64)], num: usize) -> Vec<(String, f64)> {
+    let rare_lgrams = frequencies[frequencies.len() - num..].to_vec();
+    return rare_lgrams;
+}
