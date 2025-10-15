@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 pub fn calculate_frequencies(text: &String, l: usize, alphabet: Option<&str>) -> Vec<(String, f64)> {
     let mut frequencies = HashMap::new();
@@ -35,4 +35,10 @@ pub fn get_often_lgrams(frequencies: &[(String, f64)], num: usize) -> Vec<(Strin
 pub fn get_rare_lgrams(frequencies: &[(String, f64)], num: usize) -> Vec<(String, f64)> {
     let rare_lgrams = frequencies[frequencies.len() - num..].to_vec();
     return rare_lgrams;
+}
+
+pub fn existence_check(set1: &[(String, f64)], set2: &[(String, f64)]) -> bool {
+    let lgrams2: HashSet<&String> = set2.iter().map(|(lgram, _)| lgram).collect();
+    let verify = set1.iter().all(|(lgram, _)| lgrams2.contains(lgram));
+    return verify;
 }
