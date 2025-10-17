@@ -1,3 +1,7 @@
+use std::result;
+
+use rand::rngs::adapter::ReadRng;
+
 use crate::utils;
 use crate::freq;
 
@@ -52,5 +56,16 @@ pub fn criteria40(text_for_check: &String, l: usize, text_length: usize, ukr_ind
     let lsequence_index = utils::compute_index_of_coincidence(&lsequence, l);
 
     let result = (ukr_index - lsequence_index).abs() < index_difference;
+    return result;
+}
+
+pub fn criteria50(ukr_frequencies: &[(String, f64)], text_for_check: &String, num_rare_lgrams: usize, l: usize, text_length: usize, num_of_empty_boxes: usize) -> bool {
+    let ukr_rare_frequencies = freq::get_rare_lgrams(ukr_frequencies, num_rare_lgrams);
+    let lsequence = utils::get_subtext(text_for_check, text_length);
+    let lsequence_frequencies = freq::calculate_frequencies(&lsequence, l, None);
+    let common_lgrams = freq::intersection_of_sets(&lsequence_frequencies, &ukr_rare_frequencies);
+
+    let f_empty = num_rare_lgrams - common_lgrams.len();
+    let result = f_empty > num_of_empty_boxes;
     return result;
 }
