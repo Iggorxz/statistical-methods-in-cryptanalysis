@@ -46,3 +46,11 @@ pub fn criteria23(ukr_frequencies: &[(String, f64)], text_for_check: &String, nu
     let result = ff > kf;
     return result;
 }
+
+pub fn criteria40(text_for_check: &String, l: usize, text_length: usize, ukr_index: f64, index_difference: f64) -> bool {
+    let lsequence = utils::get_subtext(text_for_check, text_length);
+    let lsequence_index = utils::compute_index_of_coincidence(&lsequence, l);
+
+    let result = (ukr_index - lsequence_index).abs() < index_difference;
+    return result;
+}
