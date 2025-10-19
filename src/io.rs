@@ -6,7 +6,7 @@ pub fn read_txt_file(file: &str) -> Result<String> {
     return Ok(text); 
 }
 
-pub fn format_ukrainian_text(text: String, alphabet: &str) -> String {
+pub fn format_ukrainian_text(text: &String, alphabet: &str) -> String {
     let mut formated_text = text.to_lowercase().replace("ґ", "г");
     formated_text = formated_text.chars().filter(|ch| alphabet.contains(*ch)).collect();
     return formated_text;
