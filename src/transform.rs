@@ -34,3 +34,28 @@ pub fn affine_encryption(text: &String, key: (usize, usize), alphabet: &str) -> 
 
     return result;
 }
+
+pub fn bigram_affine_encryption(text: &String, key: (usize, usize), alphabet: &str) -> String {
+    let mut result = String::new();
+    let mut text = text.clone();
+    let m = alphabet.chars().count().pow(2);
+
+    if text.chars().count() % 2 != 0 {
+        text.push('а');
+    }
+
+    if key.0.gcd(&m) != 1 {
+        panic!("a and m are not comprime");
+    }
+
+    for i in (0..text.chars().count()).step_by(2) {
+        let ch1 = text.chars().nth(i).unwrap();
+        let ch2 = text.chars().nth(i+1).unwrap();
+        let x = utils::symbols_to_int(ch1.to_string() + &ch2.to_string(), alphabet);
+        let y = (key.0 * x + key.1) % m;
+        let new_bigram = utils::int_to_symbols(y, 2, alphabet);
+        result.push_str(&new_bigram);
+    }
+
+    return result;
+}
