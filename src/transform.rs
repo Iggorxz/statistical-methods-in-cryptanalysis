@@ -73,3 +73,24 @@ pub fn generate_random_uniform_text(l: usize, alphabet: &str) -> String {
 
     return result;
 }
+
+pub fn generate_rec_text(length: usize, l: usize, alphabet: &str) -> String {
+    let mut result = String::new();
+    let mut y0 = generate_random_uniform_text(l, alphabet);
+    let mut y1 = generate_random_uniform_text(l, alphabet);
+    result.push_str(&y0);
+    result.push_str(&y1);
+
+    for _ in 0..(length - 2) {
+        let x0 = utils::symbols_to_int(y0.clone(), alphabet);
+        let x1 = utils::symbols_to_int(y1.clone(), alphabet);
+        let y_int = (x0 + x1) % 32usize.pow(l as u32);
+        let y = utils::int_to_symbols(y_int, l, alphabet);
+
+        result.push_str(&y);
+        y0 = y1;
+        y1 = y;
+    }
+
+    return result;
+}
