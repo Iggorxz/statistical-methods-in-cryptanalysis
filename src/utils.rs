@@ -25,7 +25,7 @@ pub fn compute_index_of_coincidence(text: &str, l: usize) -> f64 {
     return index;
 }
 
-pub fn int_to_symbols(mut int: usize, l: usize, ukrainian_alphabet: &'static str) -> String {
+pub fn int_to_symbols(mut int: usize, l: usize, ukrainian_alphabet: &str) -> String {
     let mut result = Vec::with_capacity(l);
     for _ in 0..l {
         let index = int % 32;
@@ -37,7 +37,7 @@ pub fn int_to_symbols(mut int: usize, l: usize, ukrainian_alphabet: &'static str
     return result.iter().rev().collect()
 }
 
-pub fn symbols_to_int(text: String, ukrainian_alphabet: &'static str) -> usize {
+pub fn symbols_to_int(text: String, ukrainian_alphabet: &str) -> usize {
     let mut num = 0;
     for ch in text.chars(){
         if let Some(index) = ukrainian_alphabet.chars().position(|c| c == ch){
