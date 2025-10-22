@@ -1,4 +1,5 @@
 use num_integer::Integer;
+use crate::utils;
 
 pub fn vigenere_encryption(text: &String, key: &String, alphabet: &str) -> String {
     let mut result = String::new();
@@ -26,12 +27,10 @@ pub fn affine_encryption(text: &String, key: (usize, usize), alphabet: &str) -> 
     }
 
     for char in text.chars() {
-        let x: usize = alphabet.chars().position(|c| c == char)
-        .expect("Character not found in alphabet");
+        let x = utils::symbols_to_int(char.to_string(), alphabet);
         let y = (key.0 * x + key.1) % 32;
-        let new_char = alphabet.chars().nth(y)
-        .expect("index is out of alphabet");
-        result.push(new_char);
+        let new_char = utils::int_to_symbols(y, 1, alphabet);
+        result.push_str(&new_char);
     }
 
     return result;
