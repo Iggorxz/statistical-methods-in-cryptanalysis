@@ -1,4 +1,5 @@
 use num_integer::Integer;
+use rand::Rng;
 use crate::utils;
 
 pub fn vigenere_encryption(text: &String, key: &String, alphabet: &str) -> String {
@@ -55,6 +56,19 @@ pub fn bigram_affine_encryption(text: &String, key: (usize, usize), alphabet: &s
         let y = (key.0 * x + key.1) % m;
         let new_bigram = utils::int_to_symbols(y, 2, alphabet);
         result.push_str(&new_bigram);
+    }
+
+    return result;
+}
+
+pub fn generate_random_uniform_text(l: usize, alphabet: &str) -> String {
+    let mut rng = rand::thread_rng();
+    let alphabet_chars: Vec<char> = alphabet.chars().collect();
+    let mut result = String::with_capacity(l);
+
+    for _ in 0..l {
+        let index = rng.gen_range(0..alphabet_chars.len());
+        result.push(alphabet_chars[index]);
     }
 
     return result;
