@@ -48,8 +48,6 @@ pub fn bigram_affine_encryption(text: &str, key: (usize, usize), alphabet: &str)
         text.push('а');
     }
 
-    dbg!(&m);
-    dbg!(key.0);
     if key.0.gcd(&m) != 1 {
         panic!("a and m are not comprime");
     }
