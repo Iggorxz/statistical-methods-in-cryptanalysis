@@ -7,3 +7,4 @@ pub const INDEX_DIFFERENCE: f64 = 0.01;
 pub const NUM_RARE_LGRAMS: usize = 20;
 pub const NUM_OF_EMPTY_BOXES: usize = 17;
 pub const VIGENERE_KEY_LEN: usize = 1;
+
