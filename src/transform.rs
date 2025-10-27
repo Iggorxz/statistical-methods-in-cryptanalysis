@@ -1,6 +1,6 @@
 use crate::utils;
 use num_integer::Integer;
-use rand::Rng;
+use rand::seq::IteratorRandom;
 
 pub fn vigenere_encryption(text: &str, key: &str, alphabet: &str) -> String {
     let mut result = String::new();
@@ -64,15 +64,9 @@ pub fn bigram_affine_encryption(text: &str, key: (usize, usize), alphabet: &str)
 
 pub fn generate_random_uniform_text(l: usize, alphabet: &str) -> String {
     let mut rng = rand::thread_rng();
-    let alphabet_chars: Vec<char> = alphabet.chars().collect();
-    let mut result = String::with_capacity(l);
-
-    for _ in 0..l {
-        let index = rng.gen_range(0..alphabet_chars.len());
-        result.push(alphabet_chars[index]);
-    }
-
-    result
+    (0..l)
+        .map(|_| alphabet.chars().choose(&mut rng).unwrap())
+        .collect()
 }
 
 pub fn generate_rec_text(length: usize, l: usize, alphabet: &str) -> String {

@@ -102,3 +102,14 @@ pub fn criteria50(
     let f_empty = num_rare_lgrams - common_lgrams.len();
     f_empty > num_of_empty_boxes
 }
+
+pub fn structural_criteria(
+    text_for_check: &str,
+    size_limit: f32,
+    text_length: usize,
+    compression_strength: u32,
+) -> bool {
+    let subtext = utils::get_subtext(text_for_check, text_length);
+    let compressed = lzma::compress(subtext.as_bytes(), compression_strength).unwrap();
+    compressed.len() as f32 <= text_length as f32 * size_limit
+}

@@ -1,5 +1,8 @@
 #![allow(clippy::too_many_arguments)]
-use crate::{criterions, freq, io, utils};
+use crate::{
+    config::{COMPRESSION_STRENGTH, SIZE_LIMIT},
+    criterions, freq, io, structural_criteria, utils,
+};
 
 pub fn fpp(
     runs: usize,
@@ -12,7 +15,7 @@ pub fn fpp(
     num_rare_lgrams: usize,
     num_of_empty_boxes: usize,
     alphabet: &'static str,
-) -> (f64, f64, f64, f64, f64, f64) {
+) -> (f64, f64, f64, f64, f64, f64, f64) {
     let formated_text = io::format_ukrainian_text(ukr_text, alphabet);
     let ukr_frequencies = freq::calculate_frequencies(&formated_text, l, None);
     let ukr_index = utils::compute_index_of_coincidence(&formated_text, l);
@@ -23,6 +26,7 @@ pub fn fpp(
     let mut true_criteria23: f64 = 0.0;
     let mut true_criteria40: f64 = 0.0;
     let mut true_criteria50: f64 = 0.0;
+    let mut true_structural_criteria: f64 = 0.0;
 
     for _ in 0..runs {
         if criterions::criteria20(
@@ -80,6 +84,15 @@ pub fn fpp(
         ) {
             true_criteria50 += 1.0;
         }
+
+        if structural_criteria(
+            &formated_text,
+            SIZE_LIMIT,
+            subtext_len,
+            COMPRESSION_STRENGTH,
+        ) {
+            true_structural_criteria += 1.0
+        };
     }
 
     (
@@ -89,13 +102,14 @@ pub fn fpp(
         1.0 - (true_criteria23 / runs as f64),
         1.0 - (true_criteria40 / runs as f64),
         1.0 - (true_criteria50 / runs as f64),
+        1.0 - (true_structural_criteria / runs as f64),
     )
 }
 
 pub fn fnp(
     runs: usize,
     subtext_len: usize,
-    ukr_text: &str,
+    formated_text: &str,
     text_for_check: &str,
     l: usize,
     num_top_lgrams: usize,
@@ -103,11 +117,9 @@ pub fn fnp(
     index_difference: f64,
     num_rare_lgrams: usize,
     num_of_empty_boxes: usize,
-    alphabet: &'static str,
-) -> (f64, f64, f64, f64, f64, f64) {
-    let formated_text = io::format_ukrainian_text(ukr_text, alphabet);
-    let ukr_frequencies = freq::calculate_frequencies(&formated_text, l, None);
-    let ukr_index = utils::compute_index_of_coincidence(&formated_text, l);
+) -> (f64, f64, f64, f64, f64, f64, f64) {
+    let ukr_frequencies = freq::calculate_frequencies(formated_text, l, None);
+    let ukr_index = utils::compute_index_of_coincidence(formated_text, l);
 
     let mut true_criteria20: f64 = 0.0;
     let mut true_criteria21: f64 = 0.0;
@@ -115,6 +127,7 @@ pub fn fnp(
     let mut true_criteria23: f64 = 0.0;
     let mut true_criteria40: f64 = 0.0;
     let mut true_criteria50: f64 = 0.0;
+    let mut true_structural_criteria: f64 = 0.0;
 
     for _ in 0..runs {
         if criterions::criteria20(
@@ -172,6 +185,14 @@ pub fn fnp(
         ) {
             true_criteria50 += 1.0;
         }
+        if structural_criteria(
+            text_for_check,
+            SIZE_LIMIT,
+            subtext_len,
+            COMPRESSION_STRENGTH,
+        ) {
+            true_structural_criteria += 1.0
+        };
     }
 
     (
@@ -181,6 +202,6 @@ pub fn fnp(
         true_criteria23 / runs as f64,
         true_criteria40 / runs as f64,
         true_criteria50 / runs as f64,
+        true_structural_criteria / runs as f64,
     )
 }
-
