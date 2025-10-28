@@ -15,7 +15,7 @@ pub fn fpp(
     num_rare_lgrams: usize,
     num_of_empty_boxes: usize,
     alphabet: &'static str,
-) -> (f64, f64, f64, f64, f64, f64, f64) {
+) -> [f64; 7] {
     let formated_text = io::format_ukrainian_text(ukr_text, alphabet);
     let ukr_frequencies = freq::calculate_frequencies(&formated_text, l, None);
     let ukr_index = utils::compute_index_of_coincidence(&formated_text, l);
@@ -95,7 +95,7 @@ pub fn fpp(
         };
     }
 
-    (
+    [
         1.0 - (true_criteria20 / runs as f64),
         1.0 - (true_criteria21 / runs as f64),
         1.0 - (true_criteria22 / runs as f64),
@@ -103,7 +103,7 @@ pub fn fpp(
         1.0 - (true_criteria40 / runs as f64),
         1.0 - (true_criteria50 / runs as f64),
         1.0 - (true_structural_criteria / runs as f64),
-    )
+    ]
 }
 
 pub fn fnp(
@@ -117,7 +117,7 @@ pub fn fnp(
     index_difference: f64,
     num_rare_lgrams: usize,
     num_of_empty_boxes: usize,
-) -> (f64, f64, f64, f64, f64, f64, f64) {
+) -> [f64; 7] {
     let ukr_frequencies = freq::calculate_frequencies(formated_text, l, None);
     let ukr_index = utils::compute_index_of_coincidence(formated_text, l);
 
@@ -195,7 +195,7 @@ pub fn fnp(
         };
     }
 
-    (
+    [
         true_criteria20 / runs as f64,
         true_criteria21 / runs as f64,
         true_criteria22 / runs as f64,
@@ -203,5 +203,5 @@ pub fn fnp(
         true_criteria40 / runs as f64,
         true_criteria50 / runs as f64,
         true_structural_criteria / runs as f64,
-    )
+    ]
 }

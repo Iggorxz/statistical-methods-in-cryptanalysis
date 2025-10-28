@@ -1,4 +1,4 @@
-use crate::freq;
+use crate::{config::UKRAINIAN_ALPHABET, freq};
 use rand::Rng;
 
 pub fn get_subtext(text: &str, subtext_length: usize) -> &str {
@@ -41,4 +41,40 @@ pub fn symbols_to_int(text: &str, ukrainian_alphabet: &str) -> usize {
         }
     }
     num
+}
+
+pub fn to_mapped_bytes(text: &str) -> Vec<u8> {
+    text.chars()
+        .map(|c| UKRAINIAN_ALPHABET.find(c).unwrap() as u8)
+        .collect()
+}
+
+pub fn structural(
+    text: &str,
+    size_limit: f32,
+    text_length: usize,
+    compression_strength: u32,
+    runs: usize,
+) -> f64 {
+    let hits = (0..runs)
+        .map(|_| get_subtext(text, text_length))
+        .map(|subtext| {
+            let compressed =
+                lzma::compress(&to_mapped_bytes(subtext), compression_strength).unwrap();
+            compressed.len() as f64
+        })
+        .collect::<Vec<f64>>();
+
+    println!("avg: {}", hits.iter().sum::<f64>() / hits.len() as f64);
+
+    hits.iter()
+        .map(|x| {
+            if *x <= text_length as f64 * size_limit as f64 {
+                1.0
+            } else {
+                0.0
+            }
+        })
+        .sum::<f64>()
+        / runs as f64
 }
